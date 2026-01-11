@@ -95,3 +95,35 @@ CREATE TABLE password_reset_tokens (
     INDEX idx_token (token),
     INDEX idx_user_id (user_id)
 );
+
+-- Create user_profiles table
+CREATE TABLE IF NOT EXISTS user_profiles (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL UNIQUE,
+    bio TEXT,
+    gender VARCHAR(20),
+    hostel VARCHAR(50),
+    blood_group VARCHAR(10),
+    cgpa DECIMAL(3,2),
+    batch VARCHAR(20),
+    profile_picture_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Create user_profile_clubs table
+CREATE TABLE IF NOT EXISTS user_profile_clubs (
+    profile_id BIGINT NOT NULL,
+    club VARCHAR(100) NOT NULL,
+    FOREIGN KEY (profile_id) REFERENCES user_profiles(id) ON DELETE CASCADE,
+    PRIMARY KEY (profile_id, club)
+);
+
+-- Create user_profile_skills table
+CREATE TABLE IF NOT EXISTS user_profile_skills (
+    profile_id BIGINT NOT NULL,
+    skill VARCHAR(100) NOT NULL,
+    FOREIGN KEY (profile_id) REFERENCES user_profiles(id) ON DELETE CASCADE,
+    PRIMARY KEY (profile_id, skill)
+);
